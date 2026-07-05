@@ -236,8 +236,8 @@ export default {
     // ── 커맨드(전부 노출 — E2E·AI) ──
     // description = English base (what/when/why). triggers.ko = Korean vocabulary for discovery.
     // i18n two-axis rule: English matching base + per-language trigger words (space-separated).
-    const reg = (n, description, triggers, params, h) =>
-      ctx.subscriptions.push(app.commands.register(n, { description, triggers, params, handler: h }));
+    const reg = (n, description, triggers, params, h, message) =>
+      ctx.subscriptions.push(app.commands.register(n, { description, triggers, params, handler: h, message }));
 
     reg(
       "toggle",
@@ -248,6 +248,7 @@ export default {
         setDraw(typeof (p && p.on) === "boolean" ? p.on : !state.drawing);
         return { drawing: state.drawing };
       },
+      (d) => (d.drawing ? "그리기 모드를 켰습니다." : "그리기 모드를 껐습니다."),
     );
     reg(
       "color",
@@ -262,6 +263,7 @@ export default {
         }
         return { color: state.color };
       },
+      (d) => `펜 색을 ${d.color}로 바꿨습니다.`,
     );
     reg(
       "width",
@@ -274,6 +276,7 @@ export default {
         syncBar();
         return { width: w };
       },
+      (d) => `펜 굵기를 ${d.width}px로 바꿨습니다.`,
     );
     reg(
       "eraser",
@@ -284,7 +287,8 @@ export default {
       state.eraser = typeof (p && p.on) === "boolean" ? p.on : !state.eraser;
       syncBar();
       return { eraser: state.eraser };
-    });
+    },
+    (d) => (d.eraser ? "지우개 모드를 켰습니다." : "펜 모드로 돌아왔습니다."));
     reg(
       "stroke",
       "Draw one stroke programmatically via coordinates — lets AI or automation mark/highlight a specific position (logo, button, area) on screen without human drag. Use when user asks AI to annotate or point to something on screen.",
@@ -302,7 +306,7 @@ export default {
           .filter((pt) => Array.isArray(pt) && pt.length >= 2) // null·비배열 제거(pt[0] throw·[0,0] 오통과 방지)
           .map((pt) => [Number(pt[0]), Number(pt[1])])
           .filter((pt) => Number.isFinite(pt[0]) && Number.isFinite(pt[1]));
-        if (!clean.length) return { ok: false, error: "points 필요([[x,y],...])" };
+        if (!clean.length) return { ok: false, code: "INVALID_INPUT", message: "points 필요([[x,y],...])" };
         const s = {
           color: p && p.color ? String(p.color) : state.color,
           width: p && Number.isFinite(Number(p.width)) ? Number(p.width) : state.width,
@@ -313,6 +317,7 @@ export default {
         redraw();
         return { ok: true, strokes: strokes.length, points: clean.length };
       },
+      (d) => `획을 그렸습니다(총 ${d.strokes}획).`,
     );
     reg(
       "tools",
@@ -324,15 +329,16 @@ export default {
         syncBar();
         return { toolsHidden: state.toolsHidden, visible: state.drawing && !state.toolsHidden };
       },
+      (d) => (d.toolsHidden ? "도구를 가렸습니다." : "도구를 열었습니다."),
     );
     reg("undo", "Undo the last doodle stroke. Use when user says the last mark was wrong or wants it removed.", { ko: "낙서 되돌리기 취소 마지막 획" }, {}, () => {
       doUndo();
       return { strokes: strokes.length };
-    });
+    }, (d) => `되돌렸습니다(${d.strokes}획 남음).`);
     reg("clear", "Clear all doodles and annotations from the screen (blank canvas). Use when user asks to remove all marks.", { ko: "낙서 전부 지우기 초기화 다 지워" }, {}, () => {
       doClear();
       return { strokes: 0 };
-    });
+    }, () => "전부 지웠습니다.");
     reg(
       "state",
       "Read current doodle state — drawing mode, pen color, width, eraser mode, stroke count, toolbar visibility. Use when checking what is drawn or how many strokes are on screen.",
@@ -346,6 +352,7 @@ export default {
         eraser: state.eraser,
         strokes: strokes.length,
       }),
+      (d) => `${d.strokes}획, ${d.drawing ? "그리기 모드" : "통과 모드"}.`,
     );
 
     // ── 정리 ──
