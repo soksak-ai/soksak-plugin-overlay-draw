@@ -236,8 +236,9 @@ export default {
     // ── 커맨드(전부 노출 — E2E·AI) ──
     // description = English base (what/when/why). triggers.ko = Korean vocabulary for discovery.
     // i18n two-axis rule: English matching base + per-language trigger words (space-separated).
-    const reg = (n, description, triggers, params, h, message) =>
-      ctx.subscriptions.push(app.commands.register(n, { description, triggers, params, handler: h, message }));
+    // hint = up to 3 suggested next commands, worded suggestively ("...할 수 있습니다").
+    const reg = (n, description, triggers, params, h, message, hint) =>
+      ctx.subscriptions.push(app.commands.register(n, { description, triggers, params, handler: h, message, hint }));
 
     reg(
       "toggle",
@@ -249,6 +250,13 @@ export default {
         return { drawing: state.drawing };
       },
       (d) => (d.drawing ? "그리기 모드를 켰습니다." : "그리기 모드를 껐습니다."),
+      (d) =>
+        d.drawing
+          ? [
+              { cmd: "color", why: "펜 색을 바꿀 수 있습니다." },
+              { cmd: "stroke", why: "좌표를 지정해 프로그램적으로 획을 그릴 수 있습니다." },
+            ]
+          : [],
     );
     reg(
       "color",
@@ -264,6 +272,7 @@ export default {
         return { color: state.color };
       },
       (d) => `펜 색을 ${d.color}로 바꿨습니다.`,
+      () => [{ cmd: "stroke", why: "이 색으로 획을 그릴 수 있습니다." }],
     );
     reg(
       "width",
@@ -277,6 +286,7 @@ export default {
         return { width: w };
       },
       (d) => `펜 굵기를 ${d.width}px로 바꿨습니다.`,
+      () => [{ cmd: "stroke", why: "이 굵기로 획을 그릴 수 있습니다." }],
     );
     reg(
       "eraser",
@@ -288,7 +298,8 @@ export default {
       syncBar();
       return { eraser: state.eraser };
     },
-    (d) => (d.eraser ? "지우개 모드를 켰습니다." : "펜 모드로 돌아왔습니다."));
+    (d) => (d.eraser ? "지우개 모드를 켰습니다." : "펜 모드로 돌아왔습니다."),
+    (d) => (d.eraser ? [{ cmd: "stroke", why: "stroke 를 eraser:true 로 호출해 좌표를 지정해 지울 수 있습니다." }] : []));
     reg(
       "stroke",
       "Draw one stroke programmatically via coordinates — lets AI or automation mark/highlight a specific position (logo, button, area) on screen without human drag. Use when user asks AI to annotate or point to something on screen.",
@@ -318,6 +329,7 @@ export default {
         return { ok: true, strokes: strokes.length, points: clean.length };
       },
       (d) => `획을 그렸습니다(총 ${d.strokes}획).`,
+      (d) => (d.ok ? [{ cmd: "tools", why: "캡처 전 도구를 가릴 수 있습니다." }] : []),
     );
     reg(
       "tools",
