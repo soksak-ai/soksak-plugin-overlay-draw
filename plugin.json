@@ -3,13 +3,12 @@
   "id": "soksak-plugin-overlay-draw",
   "name": {
     "en": "Pin Doodle",
-    "ko": "Pin 낙서"
+    "ko": "Pin \ub099\uc11c"
   },
   "version": "0.0.1",
-  "repo": "https://github.com/soksak-ai/soksak-plugin-overlay-draw.git",
   "description": {
     "en": "Freehand drawing overlay on top of the screen. In draw mode use the pen to doodle; outside draw mode clicks pass through but the drawing stays visible and appears in screenshots. Color, width, eraser, undo, clear.",
-    "ko": "화면 위에 연필로 자유롭게 적고 그리는 낙서 오버레이. 그리기 모드를 켜면 펜으로 낙서하고, 끄면 클릭은 통과하되 낙서는 화면에 남아 스크린샷에도 잡힌다. 색·굵기·지우개·되돌리기·지우기."
+    "ko": "\ud654\uba74 \uc704\uc5d0 \uc5f0\ud544\ub85c \uc790\uc720\ub86d\uac8c \uc801\uace0 \uadf8\ub9ac\ub294 \ub099\uc11c \uc624\ubc84\ub808\uc774. \uadf8\ub9ac\uae30 \ubaa8\ub4dc\ub97c \ucf1c\uba74 \ud39c\uc73c\ub85c \ub099\uc11c\ud558\uace0, \ub044\uba74 \ud074\ub9ad\uc740 \ud1b5\uacfc\ud558\ub418 \ub099\uc11c\ub294 \ud654\uba74\uc5d0 \ub0a8\uc544 \uc2a4\ud06c\ub9b0\uc0f7\uc5d0\ub3c4 \uc7a1\ud78c\ub2e4. \uc0c9\u00b7\uad75\uae30\u00b7\uc9c0\uc6b0\uac1c\u00b7\ub418\ub3cc\ub9ac\uae30\u00b7\uc9c0\uc6b0\uae30."
   },
   "entry": "main.js",
   "permissions": [
@@ -23,63 +22,63 @@
         "name": "toggle",
         "title": {
           "en": "Toggle draw mode",
-          "ko": "그리기 모드 켜기/끄기"
+          "ko": "\uadf8\ub9ac\uae30 \ubaa8\ub4dc \ucf1c\uae30/\ub044\uae30"
         }
       },
       {
         "name": "color",
         "title": {
           "en": "Pen color",
-          "ko": "펜 색"
+          "ko": "\ud39c \uc0c9"
         }
       },
       {
         "name": "width",
         "title": {
           "en": "Pen width",
-          "ko": "펜 굵기"
+          "ko": "\ud39c \uad75\uae30"
         }
       },
       {
         "name": "eraser",
         "title": {
           "en": "Eraser",
-          "ko": "지우개"
+          "ko": "\uc9c0\uc6b0\uac1c"
         }
       },
       {
         "name": "stroke",
         "title": {
           "en": "Draw stroke (programmatic)",
-          "ko": "낙서 한 획(프로그램·AI·E2E)"
+          "ko": "\ub099\uc11c \ud55c \ud68d(\ud504\ub85c\uadf8\ub7a8\u00b7AI\u00b7E2E)"
         }
       },
       {
         "name": "tools",
         "title": {
           "en": "Hide/show tools (for capture)",
-          "ko": "도구 가리기/열기(캡처용)"
+          "ko": "\ub3c4\uad6c \uac00\ub9ac\uae30/\uc5f4\uae30(\ucea1\ucc98\uc6a9)"
         }
       },
       {
         "name": "undo",
         "title": {
           "en": "Undo",
-          "ko": "되돌리기"
+          "ko": "\ub418\ub3cc\ub9ac\uae30"
         }
       },
       {
         "name": "clear",
         "title": {
           "en": "Clear all",
-          "ko": "전부 지우기"
+          "ko": "\uc804\ubd80 \uc9c0\uc6b0\uae30"
         }
       },
       {
         "name": "state",
         "title": {
           "en": "Read state",
-          "ko": "상태 읽기"
+          "ko": "\uc0c1\ud0dc \uc77d\uae30"
         }
       }
     ]
